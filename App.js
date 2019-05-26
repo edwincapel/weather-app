@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{Component} from 'react'
 import { 
   StyleSheet,
   Text,
@@ -12,8 +12,22 @@ import getImageForWeather from './utils/getImageForWeather'
 
 import SearchInput from './components/SearchInput'
 
-export default class App extends React.Component {
+export default class App extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      location: 'San Francisco'
+    }
+  }
+
+  handleUpdateLocation = city => {
+    this.setState({
+      location: city
+    })
+  }
+
   render() {
+    const {location} = this.state
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <ImageBackground
@@ -22,11 +36,14 @@ export default class App extends React.Component {
           imageStyle={styles.image}
         >
           <View style={styles.detailsContainer}>
-            <Text style={[styles.largeText, styles.textStyle, styles.blue]}>San Francisco</Text>
+            <Text style={[styles.largeText, styles.textStyle, styles.blue]}>{location}</Text>
             <Text style={[styles.smallText, styles.textStyle]}>Light Cloud</Text>
             <Text style={[styles.largeText, styles.textStyle]}>24°</Text>
 
-            <SearchInput placeholder="Search any city"/>
+            <SearchInput 
+              placeholder="Search any city"
+              onSubmit={this.handleUpdateLocation}
+            />
           </View>
         </ImageBackground>
       </KeyboardAvoidingView>
@@ -38,6 +55,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#34495E'
+  },
+  detailsContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.2)',
+    paddingHorizontal: 20
   },
   imageContainer:{
     flex: 1
@@ -53,7 +76,8 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     textAlign: 'center',
-    fontFamily: Platform.OS == 'ios' ? 'AvenirNext-Regular' : 'Roboto'
+    fontFamily: Platform.OS == 'ios' ? 'AvenirNext-Regular' : 'Roboto',
+    color: 'white'
   },
   largeText: {
     fontSize: 44
